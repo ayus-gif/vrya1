@@ -1,5 +1,5 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -34,59 +34,56 @@ app.post('/api/send-otp', async (req, res) => {
 
     console.log(`[OTP Bot] Generated OTP ${otp} for ${email}`);
 
-    // Check if SMTP is configured
-    const user = process.env.EMAIL_USER;
-    const pass = process.env.EMAIL_PASS;
+    // Check if Resend API Key is configured
+    const resendApiKey = process.env.RESEND_API_KEY;
 
-    if (!user || !pass || user === 'your_gmail_address@gmail.com' || pass === 'your_gmail_app_password') {
-        console.log(`[OTP Bot] SMTP credentials not configured in .env.`);
+    if (!resendApiKey || resendApiKey === 'your_resend_api_key') {
+        console.log(`[OTP Bot] Resend API Key not configured.`);
         return res.status(500).json({
             success: false,
-            message: 'SMTP Server is not configured. Please add your EMAIL_USER and EMAIL_PASS in the .env file.'
+            message: 'Email service not configured. Please add RESEND_API_KEY in environment variables.'
         });
     }
 
-    // Configure Nodemailer transporter
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: user,
-            pass: pass
-        }
-    });
-
-    const mailOptions = {
-        from: `"VYRA Games" <${user}>`,
-        to: email,
-        subject: 'VYRA Games — Gmail Verification OTP',
-        html: `
-            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0c0d14; color: #ffffff; padding: 2rem; border-radius: 16px; max-width: 500px; margin: auto; border: 1px solid #1a1c29;">
-                <div style="text-align: center; margin-bottom: 1.5rem;">
-                    <h1 style="color: #00ff66; margin: 0; font-size: 2rem; letter-spacing: 2px;">VYRA GAMES</h1>
-                    <p style="color: #8f92a1; font-size: 0.9rem; margin-top: 5px;">Your Esports & Casual Gaming Portal</p>
-                </div>
-                <hr style="border: 0; border-top: 1px solid #1a1c29; margin-bottom: 1.5rem;" />
-                <p style="font-size: 1rem; line-height: 1.5; color: #e1e1e6;">Hello Gamers,</p>
-                <p style="font-size: 1rem; line-height: 1.5; color: #e1e1e6;">Thank you for registering on VYRA. Use the following One-Time Password (OTP) to complete your Gmail sign-in. This OTP is valid for 5 minutes.</p>
-                
-                <div style="background-color: rgba(0, 255, 102, 0.05); border: 1px solid rgba(0, 255, 102, 0.2); border-radius: 12px; padding: 1.5rem; text-align: center; margin: 2rem 0;">
-                    <span style="font-size: 2.5rem; font-weight: 700; color: #00ff66; letter-spacing: 8px;">${otp}</span>
-                </div>
-                
-                <p style="font-size: 0.85rem; color: #8f92a1; line-height: 1.5; text-align: center;">If you didn't request this verification, please ignore this email.</p>
-                <hr style="border: 0; border-top: 1px solid #1a1c29; margin-top: 1.5rem; margin-bottom: 1rem;" />
-                <p style="font-size: 0.8rem; color: #5a5c6a; text-align: center; margin: 0;">&copy; 2026 VYRA Games. All Rights Reserved.</p>
-            </div>
-        `
-    };
+    // Use Resend HTTP API (works on Render free tier - no SMTP port blocking)
+    const resend = new Resend(resendApiKey);
 
     try {
-        await transporter.sendMail(mailOptions);
-        console.log(`[OTP Bot] Verification email successfully sent to ${email}`);
+        const { data, error } = await resend.emails.send({
+            from: 'VYRA Games <onboarding@resend.dev>',
+            to: [email],
+            subject: 'VYRA Games — Gmail Verification OTP',
+            html: `
+                <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0c0d14; color: #ffffff; padding: 2rem; border-radius: 16px; max-width: 500px; margin: auto; border: 1px solid #1a1c29;">
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <h1 style="color: #00ff66; margin: 0; font-size: 2rem; letter-spacing: 2px;">VYRA GAMES</h1>
+                        <p style="color: #8f92a1; font-size: 0.9rem; margin-top: 5px;">Your Esports & Casual Gaming Portal</p>
+                    </div>
+                    <hr style="border: 0; border-top: 1px solid #1a1c29; margin-bottom: 1.5rem;" />
+                    <p style="font-size: 1rem; line-height: 1.5; color: #e1e1e6;">Hello Gamer,</p>
+                    <p style="font-size: 1rem; line-height: 1.5; color: #e1e1e6;">Thank you for registering on VYRA. Use the following One-Time Password (OTP) to complete your Gmail sign-in. This OTP is valid for <strong>5 minutes</strong>.</p>
+                    
+                    <div style="background-color: rgba(0, 255, 102, 0.05); border: 1px solid rgba(0, 255, 102, 0.2); border-radius: 12px; padding: 1.5rem; text-align: center; margin: 2rem 0;">
+                        <span style="font-size: 2.5rem; font-weight: 700; color: #00ff66; letter-spacing: 8px;">${otp}</span>
+                    </div>
+                    
+                    <p style="font-size: 0.85rem; color: #8f92a1; line-height: 1.5; text-align: center;">If you didn't request this verification, please ignore this email.</p>
+                    <hr style="border: 0; border-top: 1px solid #1a1c29; margin-top: 1.5rem; margin-bottom: 1rem;" />
+                    <p style="font-size: 0.8rem; color: #5a5c6a; text-align: center; margin: 0;">&copy; 2026 VYRA Games. All Rights Reserved.</p>
+                </div>
+            `
+        });
+
+        if (error) {
+            console.error('[OTP Bot] Resend error:', error);
+            return res.status(500).json({ success: false, message: 'Failed to send OTP email. Please try again.' });
+        }
+
+        console.log(`[OTP Bot] Email sent successfully via Resend to ${email}. ID: ${data.id}`);
         return res.json({ success: true, message: 'OTP sent to your Gmail.' });
     } catch (error) {
         console.error('[OTP Bot] Error sending email:', error);
-        return res.status(500).json({ success: false, message: 'Failed to send OTP email. Please try again later or check server configuration.' });
+        return res.status(500).json({ success: false, message: 'Failed to send OTP email. Please try again later.' });
     }
 });
 
