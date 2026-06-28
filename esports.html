@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYRA Esports — Free Fire Tournaments</title>
+    <meta name="description" content="Join premium Esports lobbies for Free Fire. Play custom rooms and win real cash payouts directly to UPI.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- PWA Manifest link -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00ff66">
+    <style>
+        /* Esports specific styles */
+        .esports-hero {
+            position: relative;
+            background: linear-gradient(rgba(12, 13, 20, 0.6), rgba(12, 13, 20, 0.95)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80') no-repeat center center;
+            background-size: cover;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tournaments-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .game-section {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .game-banner {
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            height: 300px;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .game-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .banner-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(7, 8, 12, 0.95));
+            padding: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .banner-info h2 {
+            font-family: var(--font-header);
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .banner-info p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Tournament List */
+        .tournament-list-header {
+            font-family: var(--font-header);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tournament-list-header i {
+            color: var(--neon-green);
+        }
+
+        .tournaments-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .tournament-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 120px 2fr 1fr 1fr 1.2fr;
+            align-items: center;
+            gap: 1.5rem;
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(10px);
+        }
+
+        .tournament-card:hover {
+            border-color: rgba(0, 255, 102, 0.3);
+            transform: scale(1.01);
+            box-shadow: 0 8px 30px rgba(0, 255, 102, 0.05);
+        }
+
+        .t-time-badge {
+            background: rgba(255, 179, 0, 0.1);
+            border: 1px solid var(--neon-gold);
+            color: var(--neon-gold);
+            padding: 0.8rem;
+            border-radius: 12px;
+            text-align: center;
+            font-family: var(--font-header);
+            font-weight: 700;
+        }
+
+        .t-time-badge.live {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: #ff3333;
+            color: #ff3333;
+            animation: pulse-border 1.5s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(255, 51, 51, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); }
+        }
+
+        .t-time-badge span {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .t-details h3 {
+            font-family: var(--font-header);
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .t-details .meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .t-details .meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .t-prizes, .t-entry {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .t-prizes span:first-child, .t-entry span:first-child {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .t-prizes span:last-child {
+            color: var(--neon-green);
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .t-entry span:last-child {
+            color: var(--neon-blue);
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .t-action {
+            text-align: right;
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 8, 12, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        .modal-title {
+            font-family: var(--font-header);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: var(--transition-fast);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--neon-green);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .success-message i {
+            font-size: 4rem;
+            color: var(--neon-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .success-message h3 {
+            font-family: var(--font-header);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-message p {
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .tournament-card {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            .t-time-badge {
+                grid-column: span 2;
+            }
+            .t-details {
+                grid-column: span 2;
+            }
+            .t-action {
+                grid-column: span 2;
+                text-align: left;
+            }
+            .t-action .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-accent"><i class="fa-solid fa-crosshairs"></i></span> VYRA
+            </a>
+            
+            <nav class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="https://go.cloudskillsboost.google/arcade" target="_blank" class="nav-link"><i class="fa-solid fa-gamepad"></i> Arcade Games</a>
+                <a href="#" class="nav-link active"><i class="fa-solid fa-trophy"></i> Esports</a>
+                <div class="user-balance-nav dropdown">
+                    <div class="currency cash dropbtn"><i class="fa-solid fa-wallet"></i> ₹0.00 <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; margin-left: 4px;"></i></div>
+                    <div class="dropdown-content">
+                        <a href="#add-cash" id="addCashBtn"><i class="fa-solid fa-plus-circle"></i> Add Cash</a>
+                        <a href="#withdraw-cash" id="withdrawCashBtn"><i class="fa-solid fa-minus-circle"></i> Withdraw Cash</a>
+                    </div>
+                </div>
+                <a href="#signin" id="gmailSignInBtn" class="btn btn-secondary btn-nav-signup" style="gap: 8px;"><i class="fa-solid fa-envelope" style="color: #ea4335;"></i> Sign in with Gmail</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Esports Hero -->
+    <section class="esports-hero">
+        <span class="promo-badge"><i class="fa-solid fa-trophy"></i> HIGH-OCTANE ESPORTS ROOMS</span>
+        <h1 class="hero-title">Custom Lobby <span class="accent-text">Tournaments</span></h1>
+        <p class="hero-subtitle">Register using your character UID, join custom rooms on time, and grab massive prize pools paid instantly.</p>
+    </section>
+
+    <!-- Main Tournaments Content -->
+    <main class="tournaments-container">
+        
+        <!-- FREE FIRE SECTION ONLY -->
+        <section id="freefire-section" class="game-section">
+            <div class="game-banner">
+                <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=1200&q=80" alt="Free Fire Lobby">
+                <div class="banner-overlay">
+                    <div class="banner-info">
+                        <h2>Garena Free Fire</h2>
+                        <p>Clash Squad & Battle Royale. Bermuda & Purgatory.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tournament-list-header">
+                <i class="fa-solid fa-circle-dot"></i> Live & Upcoming Tournaments
+            </div>
+
+            <div class="tournaments-grid" id="freefire-list">
+                <!-- Dynamically Generated -->
+            </div>
+            
+            <!-- City Qualifiers Rules Diary -->
+            <div class="table-container" style="padding: 2.5rem; margin-top: 4rem; background: linear-gradient(135deg, var(--bg-card) 0%, rgba(18, 19, 26, 0.8) 100%); border: 1px solid rgba(0, 255, 102, 0.15); box-shadow: 0 10px 40px rgba(0, 255, 102, 0.03); border-radius: 16px;">
+                <h2 style="font-family: var(--font-header); font-size: 2rem; color: var(--neon-gold); margin-top: 0; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255, 179, 0, 0.2); display: flex; align-items: center; gap: 15px;">
+                    <i class="fa-solid fa-book-open"></i> City Qualifiers Week 4 Rules
+                </h2>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2rem;">
+                    <li style="font-size: 1.05rem; line-height: 1.6; color: #fff; display: flex; align-items: flex-start; gap: 12px;">
+                        <span style="color: var(--neon-gold); font-size: 1.2rem; margin-top: 2px;">♦</span>
+                        <span>ALL PLAYERS MUST BE <strong>INDIAN CITIZENS</strong> AND <strong>16 YEARS OR OLDER</strong>, AS OF CITY QUALIFIERS MATCHDAY.</span>
+                    </li>
+                    <li style="font-size: 1.05rem; line-height: 1.6; color: #fff; display: flex; align-items: flex-start; gap: 12px;">
+                        <span style="color: var(--neon-gold); font-size: 1.2rem; margin-top: 2px;">♦</span>
+                        <span>EACH PLAYER MUST HAVE A MINIMUM RANK OF <strong>HEROIC</strong> AND <strong>ACCOUNT LEVEL 40 OR ABOVE</strong>.</span>
+                    </li>
+                    <li style="font-size: 1.05rem; line-height: 1.6; color: #fff; display: flex; align-items: flex-start; gap: 12px;">
+                        <span style="color: var(--neon-gold); font-size: 1.2rem; margin-top: 2px;">♦</span>
+                        <span><strong>ONE SUBSTITUTE PLAYER</strong> IS ALLOWED, WHO MUST MEET THE SAME ELIGIBILITY CRITERIA.</span>
+                    </li>
+                    <li style="font-size: 1.05rem; line-height: 1.6; color: #fff; display: flex; align-items: flex-start; gap: 12px;">
+                        <span style="color: var(--neon-gold); font-size: 1.2rem; margin-top: 2px;">♦</span>
+                        <span>A PLAYER CAN PARTICIPATE IN <strong>ONLY ONE TEAM</strong>.</span>
+                    </li>
+                    <li style="font-size: 1.05rem; line-height: 1.6; color: #fff; display: flex; align-items: flex-start; gap: 12px;">
+                        <span style="color: var(--neon-gold); font-size: 1.2rem; margin-top: 2px;">♦</span>
+                        <span>A TEAM CAN PARTICIPATE IN <strong>MULTIPLE CITY QUALIFIERS</strong>, IF THEY FAIL TO QUALIFY FROM PRIOR ATTEMPTS.</span>
+                    </li>
+                    <li style="font-size: 1.05rem; line-height: 1.6; color: #fff; display: flex; align-items: flex-start; gap: 12px;">
+                        <span style="color: var(--neon-gold); font-size: 1.2rem; margin-top: 2px;">♦</span>
+                        <span>ONCE A TEAM QUALIFIES FROM CITY QUALIFIERS, THE <strong>SAME ROSTER REMAINS LOCKED</strong> FOR THE REST OF THE TOURNAMENT.</span>
+                    </li>
+                    <li style="font-size: 1.05rem; line-height: 1.6; color: #fff; display: flex; align-items: flex-start; gap: 12px;">
+                        <span style="color: var(--neon-gold); font-size: 1.2rem; margin-top: 2px;">♦</span>
+                        <span>THE <strong>WINNING TEAM</strong> FROM ANY CITY QUALIFIERS CANNOT PARTICIPATE IN FFC QUALIFIERS.</span>
+                    </li>
+                    <li style="font-size: 1.05rem; line-height: 1.6; color: #fff; display: flex; align-items: flex-start; gap: 12px;">
+                        <span style="color: var(--neon-gold); font-size: 1.2rem; margin-top: 2px;">♦</span>
+                        <span>TEAMS THAT ARE <strong>UNABLE TO PARTICIPATE IN</strong>, OR QUALIFY VIA THE CITY QUALIFIERS CAN REGISTER FOR <strong>FFC QUALIFIERS</strong>.</span>
+                    </li>
+                </ul>
+                
+                <!-- City Venues Schedule Panel -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px; border: 1px solid rgba(255,179,0,0.1); text-align: center;">
+                        <span style="color: var(--neon-gold); display: block; font-weight: bold; font-size: 1.1rem; margin-bottom: 5px;">📍 INDORE</span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);"><i class="fa-solid fa-calendar-days"></i> 28 JUNE, 9 AM</span>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px; border: 1px solid rgba(255,179,0,0.1); text-align: center;">
+                        <span style="color: var(--neon-gold); display: block; font-weight: bold; font-size: 1.1rem; margin-bottom: 5px;">📍 CHANDIGARH</span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);"><i class="fa-solid fa-calendar-days"></i> 28 JUNE, 9 AM</span>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px; border: 1px solid rgba(255,179,0,0.1); text-align: center;">
+                        <span style="color: var(--neon-gold); display: block; font-weight: bold; font-size: 1.1rem; margin-bottom: 5px;">📍 AHMEDABAD</span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);"><i class="fa-solid fa-calendar-days"></i> 28 JUNE, 9 AM</span>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px; border: 1px solid rgba(255,179,0,0.1); text-align: center;">
+                        <span style="color: var(--neon-gold); display: block; font-weight: bold; font-size: 1.1rem; margin-bottom: 5px;">📍 JAIPUR</span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);"><i class="fa-solid fa-calendar-days"></i> 28 JUNE, 9 AM</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Registration Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modalFormContent">
+                <h2 class="modal-title" id="modalGameTitle">Register Tournament</h2>
+                <div id="uidFormFields">
+                    <!-- Populated dynamically via JS based on Solo vs Squad mode -->
+                </div>
+                <button class="btn btn-primary w-full" onclick="submitRegistration()">Confirm & Register</button>
+            </div>
+            <div id="modalSuccessContent" class="success-message">
+                <i class="fa-solid fa-circle-check"></i>
+                <h3>Registration Successful!</h3>
+                <p>Room ID and Password will be sent to your inbox 15 minutes before the match starts.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><span class="logo-accent"><i class="fa-solid fa-crosshairs"></i></span> VYRA</a>
+                <p>Enjoy free and real cash tournaments. Fast withdrawals, secure transactions, and zero ads.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Responsible Gaming</a>
+            </div>
+            <div class="footer-socials">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 VYRA Games. All rights reserved. 18+ only.</p>
+        </div>
+    </footer>
+
+
+
+    <script src="script.js"></script>
+    <script>
+        // Fetch and display dynamic matches from the server
+        let matchesList = [];
+
+        async function fetchMatches() {
+            try {
+                const API_BASE = window.location.protocol === 'file:' 
+                    ? 'https://shy-tigers-pull.loca.lt' 
+                    : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:3000' : '');
+                const response = await fetch(`${API_BASE}/api/matches`);
+                if (response.ok) {
+                    const data = await response.json();
+                    matchesList = data.matches || [];
+                }
+            } catch (e) {
+                console.error("Error fetching matches:", e);
+            }
+        }
+
+        async function generateTournaments() {
+            const listContainer = document.getElementById('freefire-list');
+            if (!listContainer) return;
+            listContainer.innerHTML = '';
+
+            await fetchMatches();
+
+            // Registered matches stored in localStorage
+            const registeredMatchIds = JSON.parse(localStorage.getItem('registeredMatchIds') || '[]');
+
+            let validSlotsCount = 0;
+
+            if (matchesList.length === 0) {
+                const message = document.createElement('div');
+                message.style.textAlign = 'center';
+                message.style.padding = '3rem';
+                message.style.color = 'var(--text-secondary)';
+                message.style.fontSize = '1.2rem';
+                message.style.border = '1px dashed var(--border-color)';
+                message.style.borderRadius = '16px';
+                message.innerHTML = `
+                    <i class="fa-solid fa-clock-rotate-left" style="font-size: 3rem; color: var(--neon-gold); margin-bottom: 1rem; display: block;"></i>
+                    No matches scheduled at the moment. Please check back later!
+                `;
+                listContainer.appendChild(message);
+                return;
+            }
+
+            matchesList.forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'tournament-card';
+
+                const isRegistered = registeredMatchIds.includes(m.id);
+                
+                // Determine if live based on simplified status or time comparison
+                const isLive = m.status === 'Live';
+
+                let actionButtonHtml = '';
+                if (isRegistered) {
+                    if (m.roomId && m.password) {
+                        actionButtonHtml = `
+                            <div style="text-align: left; background: rgba(0, 255, 102, 0.05); border: 1px solid rgba(0, 255, 102, 0.2); border-radius: 8px; padding: 8px; font-size: 0.85rem; margin-top: 5px;">
+                                <div style="color: var(--neon-green); font-weight: bold; margin-bottom: 4px;"><i class="fa-solid fa-key"></i> Credentials Published</div>
+                                <div><strong>ID:</strong> <code style="user-select: all;">${m.roomId}</code></div>
+                                <div><strong>Pass:</strong> <code style="user-select: all;">${m.password}</code></div>
+                            </div>
+                        `;
+                    } else {
+                        actionButtonHtml = `
+                            <button class="btn btn-secondary" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: not-allowed;" disabled>
+                                Registered
+                            </button>
+                            <span style="display:block; font-size: 0.75rem; color: var(--neon-gold); margin-top: 4px;">Credentials at match time</span>
+                        `;
+                    }
+                } else if (m.registered >= m.totalSpots) {
+                    actionButtonHtml = `
+                        <button class="btn btn-secondary" style="background: rgba(255, 51, 51, 0.1); border: 1px solid #ff3333; color: #ff3333; cursor: not-allowed;" disabled>
+                            Lobby Full
+                        </button>
+                    `;
+                } else {
+                    actionButtonHtml = `
+                        <button class="btn btn-primary" onclick="openRegisterModal('${m.game}', '${m.time}', '${m.id}', ${m.registered}, ${m.totalSpots}, '${m.mode}')">
+                            Register Now
+                        </button>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="t-time-badge ${isLive ? 'live' : ''}">
+                        ${m.time}
+                        <span>${isLive ? 'LIVE NOW' : 'UPCOMING'}</span>
+                    </div>
+                    <div class="t-details">
+                        <h3>${m.game} Grand Arena</h3>
+                        <div class="meta">
+                            <span><i class="fa-solid fa-map"></i> ${m.map}</span>
+                            <span><i class="fa-solid fa-users"></i> ${m.mode}</span>
+                            <span style="color: var(--neon-gold);"><i class="fa-solid fa-user-check"></i> ${m.registered}/${m.totalSpots} Slots</span>
+                        </div>
+                    </div>
+                    <div class="t-prizes">
+                        <span>Prize Pool</span>
+                        <span>₹${m.prizePool}</span>
+                    </div>
+                    <div class="t-entry">
+                        <span>Entry Fee</span>
+                        <span>₹${m.entryFee}</span>
+                    </div>
+                    <div class="t-action">
+                        ${actionButtonHtml}
+                    </div>
+                `;
+                listContainer.appendChild(card);
+                validSlotsCount++;
+            });
+        }
+
+        // Modal handling
+        let currentMatchId = null;
+        let currentSpotsLimit = 0;
+        let currentRegisteredCount = 0;
+        let currentMode = "";
+
+        function openRegisterModal(gameName, slotTime, matchId, registered, totalSpots, mode) {
+            const loggedInEmail = localStorage.getItem('userEmail');
+            if (!loggedInEmail) {
+                alert('Sign in first! Please verify your Gmail account to register.');
+                const authModal = document.getElementById('gmailAuthModal');
+                if (authModal) {
+                    authModal.style.display = 'flex';
+                }
+                return;
+            }
+
+            currentMatchId = matchId;
+            currentSpotsLimit = totalSpots;
+            currentRegisteredCount = registered;
+            currentMode = mode;
+            
+            const formFieldsContainer = document.getElementById('uidFormFields');
+            formFieldsContainer.innerHTML = '';
+
+            if (mode.includes("Squad")) {
+                for (let j = 1; j <= 4; j++) {
+                    const formGroup = document.createElement('div');
+                    formGroup.className = 'form-group';
+                    formGroup.innerHTML = `
+                        <label for="charUID_${j}">Player ${j} Character UID</label>
+                        <input type="text" id="charUID_${j}" class="form-input" placeholder="e.g. 518290381${j}" required>
+                    `;
+                    formFieldsContainer.appendChild(formGroup);
+                }
+            } else if (mode.includes("Duo")) {
+                for (let j = 1; j <= 2; j++) {
+                    const formGroup = document.createElement('div');
+                    formGroup.className = 'form-group';
+                    formGroup.innerHTML = `
+                        <label for="charUID_${j}">Player ${j} Character UID</label>
+                        <input type="text" id="charUID_${j}" class="form-input" placeholder="e.g. 518290381${j}" required>
+                    `;
+                    formFieldsContainer.appendChild(formGroup);
+                }
+            } else {
+                const formGroup = document.createElement('div');
+                formGroup.className = 'form-group';
+                formGroup.innerHTML = `
+                    <label for="charUID">Game UID / Character ID</label>
+                    <input type="text" id="charUID" class="form-input" placeholder="e.g. 5182903810" required>
+                `;
+                formFieldsContainer.appendChild(formGroup);
+            }
+
+            document.getElementById('registerModal').classList.add('active');
+            document.getElementById('modalGameTitle').innerText = `Register: ${gameName} (${slotTime})`;
+            document.getElementById('modalFormContent').style.display = 'block';
+            document.getElementById('modalSuccessContent').style.display = 'none';
+        }
+
+        function closeModal() {
+            document.getElementById('registerModal').classList.remove('active');
+        }
+
+        async function submitRegistration() {
+            if (currentMatchId && currentRegisteredCount >= currentSpotsLimit) {
+                alert('This tournament lobby is full!');
+                return;
+            }
+
+            if (currentMode.includes("Squad")) {
+                const uids = [];
+                for (let j = 1; j <= 4; j++) {
+                    const val = document.getElementById(`charUID_${j}`).value.trim();
+                    if (!val) {
+                        alert(`Please fill out Player ${j} Character UID.`);
+                        return;
+                    }
+                    if (val.length < 8 || isNaN(val)) {
+                        alert(`Please enter a valid Character UID for Player ${j} (numeric, minimum 8 digits).`);
+                        return;
+                    }
+                    uids.push(val);
+                }
+            } else if (currentMode.includes("Duo")) {
+                const uids = [];
+                for (let j = 1; j <= 2; j++) {
+                    const val = document.getElementById(`charUID_${j}`).value.trim();
+                    if (!val) {
+                        alert(`Please fill out Player ${j} Character UID.`);
+                        return;
+                    }
+                    if (val.length < 8 || isNaN(val)) {
+                        alert(`Please enter a valid Character UID for Player ${j} (numeric, minimum 8 digits).`);
+                        return;
+                    }
+                    uids.push(val);
+                }
+            } else {
+                const uid = document.getElementById('charUID').value.trim();
+                if (!uid) {
+                    alert('Please fill out character UID.');
+                    return;
+                }
+                if (uid.length < 8 || isNaN(uid)) {
+                    alert('Please enter a valid Free Fire Character UID (numeric, minimum 8 digits).');
+                    return;
+                }
+            }
+
+            // Get logged in user email
+            let userEmail = localStorage.getItem('userEmail') || '';
+
+            // Gather UIDs
+            let uids = [];
+            if (currentMode.includes("Squad")) {
+                for (let j = 1; j <= 4; j++) {
+                    uids.push(document.getElementById(`charUID_${j}`).value.trim());
+                }
+            } else if (currentMode.includes("Duo")) {
+                for (let j = 1; j <= 2; j++) {
+                    uids.push(document.getElementById(`charUID_${j}`).value.trim());
+                }
+            } else {
+                uids.push(document.getElementById('charUID').value.trim());
+            }
+
+            try {
+                const API_BASE = window.location.protocol === 'file:' 
+                    ? 'https://shy-tigers-pull.loca.lt' 
+                    : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:3000' : '');
+                const response = await fetch(`${API_BASE}/api/register-match`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ matchId: currentMatchId, email: userEmail, uids: uids })
+                });
+
+                const res = await response.json();
+                if (res.success) {
+                    // Save registered match ID to client localStorage
+                    const registeredMatchIds = JSON.parse(localStorage.getItem('registeredMatchIds') || '[]');
+                    if (!registeredMatchIds.includes(currentMatchId)) {
+                        registeredMatchIds.push(currentMatchId);
+                        localStorage.setItem('registeredMatchIds', JSON.stringify(registeredMatchIds));
+                    }
+
+                    // Success state transition
+                    document.getElementById('modalFormContent').style.display = 'none';
+                    document.getElementById('modalSuccessContent').style.display = 'block';
+                    
+                    // Refresh lobbies list
+                    generateTournaments();
+                } else {
+                    alert(res.message || 'Registration failed.');
+                }
+            } catch (err) {
+                console.error("Error submitting registration:", err);
+                alert('Error submitting registration. Please try again.');
+            }
+        }
+
+        // Initialize lists on load
+        window.addEventListener('DOMContentLoaded', () => {
+            generateTournaments();
+            // Automatically refresh list every 10 seconds to keep registrations and Room Credentials fresh
+            setInterval(generateTournaments, 10000);
+        });
+    </script>
+    <!-- Add Cash Modal -->
+    <div class="modal" id="addCashModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 8, 12, 0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+        <div class="modal-content" style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 480px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto;">
+            <button class="modal-close" id="closeAddCash" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <div id="addCashFormContent">
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 1.5rem; color: #fff;">Add Cash to Wallet</h2>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Amount (₹)</label>
+                    <input type="number" id="addCashAmount" class="form-input" placeholder="Min ₹5" min="5" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Payment Method</label>
+                    <select id="addPaymentMethod" class="form-input" style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;" disabled>
+                        <option value="upi" style="background:#000;">UPI Only (GPay / PhonePe / Paytm)</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary w-full" id="submitAddCash">Proceed to Pay</button>
+            </div>
+            
+            <div id="addCashQRContent" style="display: none; text-align: center;">
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.6rem; margin-bottom: 1rem; color: #fff;">Scan to Pay</h2>
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 12px; display: inline-block; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                    <canvas id="upiQRCanvas" style="display: block; margin: 0 auto;"></canvas>
+                </div>
+                <div style="margin-bottom: 1rem; font-size: 1.1rem; font-weight: 700; color: var(--neon-green);">
+                    Amount to Pay: ₹<span id="qrAmountVal">0.00</span>
+                </div>
+                <div id="mobileUpiBtnContainer" style="margin-bottom: 1.5rem; display: none;">
+                    <a id="mobileUpiPayLink" class="btn btn-primary w-full" href="#"><i class="fa-solid fa-mobile-screen-button"></i> Pay via UPI App</a>
+                </div>
+                <div style="text-align: left; background: rgba(0, 255, 102, 0.05); border: 1px solid rgba(0, 255, 102, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 1rem; font-size: 0.85rem; color: #e1e1e6; line-height: 1.4;">
+                    <i class="fa-solid fa-circle-info" style="color: var(--neon-green); margin-right: 4px;"></i> **What is UTR / Ref No?** It is a 12-digit number generated by your bank after a successful payment. Scan the QR code, pay, check your payment details screen, copy the UTR as shown in the image below, and paste it here.
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <img src="upi_utr_guide.png" style="width: 100%; border-radius: 8px; border: 1px solid var(--border-color); display: block;" alt="UTR Location Guide">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem; text-align: left;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">12-digit UTR / Reference No</label>
+                    <input type="text" id="upiRefInput" class="form-input" placeholder="e.g. 618290382012" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem; text-align: center; letter-spacing: 2px;">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-secondary w-full" id="btnCancelQR">Cancel</button>
+                    <button class="btn btn-primary w-full" id="btnSubmitUTR">Submit & Verify</button>
+                </div>
+            </div>
+
+            <div id="addCashSuccessContent" style="display: none; text-align: center; padding: 2rem 0;">
+                <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: var(--neon-green); margin-bottom: 1.5rem;"></i>
+                <h3 style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 0.5rem;">Payment Submitted!</h3>
+                <p style="color: var(--text-secondary);">₹<span id="addedAmountVal">0</span> addition request submitted. Balance will update within 5 minutes after verification.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coins Info Modal -->
+    <div class="modal" id="coinsInfoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 8, 12, 0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+        <div class="modal-content" style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 480px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: center;">
+            <button class="modal-close" id="closeCoinsInfo" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <div id="coinsFormContent">
+                <i class="fa-solid fa-coins" style="font-size: 4rem; color: var(--neon-gold); margin-bottom: 1.5rem; text-shadow: 0 0 20px rgba(255, 179, 0, 0.4);"></i>
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 0.5rem; color: #fff;">Convert Coins to Cash</h2>
+                
+                <div style="background: rgba(255, 179, 0, 0.05); border: 1px dashed var(--neon-gold); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">
+                    <span style="font-size: 0.9rem; color: var(--text-secondary); display: block; margin-bottom: 5px;">CONVERSION RATE</span>
+                    <strong style="font-size: 1.5rem; color: #fff; font-family: var(--font-header);">10 Coins = ₹1.00 Cash</strong>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem; text-align: left;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Coins to Redeem</label>
+                    <input type="number" id="redeemCoinsAmount" class="form-input" placeholder="Min 10 Coins" min="10" step="10" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem; text-align: center;">
+                    <span style="font-size:0.75rem; color: var(--text-secondary); margin-top:4px; display:block; text-align:center;">Your Balance: <strong id="modalCoinsAvailable" style="color: var(--neon-gold);">0 Coins</strong></span>
+                </div>
+                
+                <button class="btn btn-primary w-full" id="btnConfirmRedeem" style="background: linear-gradient(135deg, var(--neon-gold) 0%, #d4af37 100%); color: #000; box-shadow: 0 4px 15px rgba(255, 179, 0, 0.25);">Convert to Cash</button>
+            </div>
+            
+            <div id="redeemSuccessContent" style="display: none; text-align: center; padding: 2rem 0;">
+                <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: var(--neon-green); margin-bottom: 1.5rem;"></i>
+                <h3 style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 0.5rem;">Converted Successfully!</h3>
+                <p style="color: var(--text-secondary);">₹<span id="redeemedCashVal">0</span> Cash credited to your wallet balance.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Cash Modal -->
+    <div class="modal" id="withdrawCashModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 8, 12, 0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+        <div class="modal-content" style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 480px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+            <button class="modal-close" id="closeWithdrawCash" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <div id="withdrawCashFormContent">
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 1.5rem; color: #fff;">Withdraw Cash</h2>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Amount (₹)</label>
+                    <input type="number" id="withdrawAmount" class="form-input" placeholder="Min ₹300" min="300" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                    <span style="font-size:0.75rem; color: var(--text-secondary); margin-top:4px; display:block;">Available: ₹<span id="availableWithdrawBalance">0.00</span></span>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.2rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Bank Account Number</label>
+                    <input type="text" id="withdrawAccount" class="form-input" placeholder="Enter bank account number" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">IFSC Code</label>
+                    <input type="text" id="withdrawIfsc" class="form-input" placeholder="e.g. SBIN0001234" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem; text-transform: uppercase;">
+                </div>
+                <button class="btn btn-primary w-full" id="submitWithdraw">Confirm Withdrawal</button>
+            </div>
+        </div>
+    </div>
+    <!-- Gmail OTP Auth Modal -->
+    <div class="modal" id="gmailAuthModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 8, 12, 0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+        <div class="modal-content" style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 480px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+            <button class="modal-close" id="closeGmailAuth" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; display: none;"><i class="fa-solid fa-xmark"></i></button>
+            
+            <!-- Step 1: Request Email -->
+            <div id="gmailInputStep">
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 1.5rem; color: #fff;">Verify with Gmail</h2>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Gmail Address</label>
+                    <input type="email" id="gmailAddressInput" class="form-input" placeholder="example@gmail.com" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Free Fire Character UID</label>
+                    <input type="text" id="gmailFFUIDInput" class="form-input" placeholder="e.g. 5182903810" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Instagram ID</label>
+                    <input type="text" id="gmailInstaIDInput" class="form-input" placeholder="e.g. your_username" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                </div>
+                <button class="btn btn-primary w-full" id="btnRequestOtp">Send Verification OTP</button>
+            </div>
+            
+            <!-- Step 2: Input OTP -->
+            <div id="gmailOtpStep" style="display: none;">
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 1.5rem; color: #fff;">Enter Verification OTP</h2>
+                <div style="background: rgba(0, 255, 102, 0.05); border: 1px solid rgba(0, 255, 102, 0.2); border-radius: 8px; padding: 10px; margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--neon-green);">
+                    <i class="fa-solid fa-circle-info"></i> A 6-digit OTP code has been sent to your Gmail address.
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">One-Time Password (OTP)</label>
+                    <input type="text" id="gmailOtpInput" class="form-input" placeholder="Enter 6-digit OTP" required maxlength="6" style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem; text-align: center; letter-spacing: 4px;">
+                </div>
+                <button class="btn btn-primary w-full" id="btnVerifyOtp">Verify & Sign In</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QRious QR Code Generator Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+</html>

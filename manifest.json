@@ -1,0 +1,21 @@
+{
+  "short_name": "VYRA Games",
+  "name": "VYRA Games — Play & Win Real Cash",
+  "icons": [
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/index.html",
+  "background_color": "#0c0d14",
+  "theme_color": "#00ff66",
+  "display": "standalone",
+  "orientation": "portrait"
+}

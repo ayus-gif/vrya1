@@ -1,0 +1,33 @@
+[
+  {
+    "id": "u57v5a94t",
+    "game": "FREE FIRE",
+    "map": "Bermuda",
+    "time": "2026-06-28 at 13:16",
+    "mode": "Solo",
+    "entryFee": 0,
+    "prizePool": 13,
+    "registered": 2,
+    "totalSpots": 48,
+    "roomId": "",
+    "password": "",
+    "status": "Upcoming",
+    "timestamp": "2026-06-28T06:46:58.816Z",
+    "players": [
+      {
+        "email": "ar133949@gmail.com",
+        "uids": [
+          "12345678"
+        ],
+        "timestamp": "2026-06-28T06:56:54.667Z"
+      },
+      {
+        "email": "ar133949@gmail.com",
+        "uids": [
+          "12345678"
+        ],
+        "timestamp": "2026-06-28T07:25:27.476Z"
+      }
+    ]
+  }
+]

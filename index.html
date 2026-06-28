@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYRA Games — Play & Win Real Cash</title>
+    <meta name="description" content="Play exciting casual games, compete in tournaments, and win real money prizes instantly at Vyra.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- PWA Manifest link -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00ff66">
+</head>
+<body>
+
+
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-accent"><i class="fa-solid fa-crosshairs"></i></span> VYRA
+            </a>
+            
+            <nav class="nav-menu" id="navMenu">
+                <a href="https://go.cloudskillsboost.google/arcade" target="_blank" class="nav-link"><i class="fa-solid fa-gamepad"></i> Arcade Games</a>
+                <div class="user-balance-nav dropdown">
+                    <div class="currency cash dropbtn"><i class="fa-solid fa-wallet"></i> ₹0.00 <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; margin-left: 4px;"></i></div>
+                    <div class="dropdown-content">
+                        <a href="#add-cash" id="addCashBtn"><i class="fa-solid fa-plus-circle"></i> Add Cash</a>
+                        <a href="#withdraw-cash" id="withdrawCashBtn"><i class="fa-solid fa-minus-circle"></i> Withdraw Cash</a>
+                    </div>
+                </div>
+                <a href="#signin" id="gmailSignInBtn" class="btn btn-secondary btn-nav-signup" style="gap: 8px;"><i class="fa-solid fa-envelope" style="color: #ea4335;"></i> Sign in with Gmail</a>
+            </nav>
+
+            <button class="hamburger-menu" id="menuToggle" aria-label="Toggle navigation menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero & Welcome Promo -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <span class="promo-badge"><i class="fa-solid fa-bolt"></i> GET ₹20 WELCOME BONUS</span>
+                <h1 class="hero-title">Play Games. <br>Earn <span class="accent-text">Real Cash.</span></h1>
+                <p class="hero-subtitle">Compete in easy arcade tournaments, climb the leaderboards, and withdraw your winnings instantly to UPI, Paytm, or PayPal.</p>
+                <div class="hero-actions">
+                    <a href="esports.html" class="btn btn-primary btn-large">Register Now <i class="fa-solid fa-play"></i></a>
+                </div>
+            </div>
+            
+            <!-- Hero Promo Banner / Card -->
+            <div class="hero-banner-card">
+                <div class="banner-inner glass-card">
+                    <div class="banner-badge">LIVE EVENT</div>
+                    <h2>Weekly Mega Battle</h2>
+                    <div class="prize-pool">Prize Pool: <strong>₹1,000</strong></div>
+                    <div style="font-size: 0.9rem; color: var(--neon-gold); margin-bottom: 0.5rem; font-weight: 700;">
+                        <i class="fa-solid fa-calendar-days"></i> Every Sunday at 12:00 PM IST
+                    </div>
+                    <div class="timer" id="eventTimer" style="margin-bottom: 1rem;">Next Match: Sunday 12:00 PM</div>
+                    <div class="participating-avatars">
+                        <div class="avatar-group">
+                            <span class="avatar-mini">🎮</span>
+                            <span class="avatar-mini">👾</span>
+                            <span class="avatar-mini">🐱</span>
+                        </div>
+                        <span class="avatar-count">+4,210 Players Active</span>
+                    </div>
+                    <button class="btn btn-primary w-full" id="joinMegaBtn">Join Tournament (₹50)</button>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="#" class="logo"><span class="logo-accent"><i class="fa-solid fa-crosshairs"></i></span> VYRA</a>
+                <p>Enjoy free and real cash tournaments. Fast withdrawals, secure transactions, and zero ads.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Responsible Gaming</a>
+            </div>
+            <div class="footer-socials">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 VYRA Games. All rights reserved. 18+ only.</p>
+        </div>
+    </footer>
+
+    <!-- Add Cash Modal -->
+    <div class="modal" id="addCashModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 8, 12, 0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+        <div class="modal-content" style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 480px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto;">
+            <button class="modal-close" id="closeAddCash" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <div id="addCashFormContent">
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 1.5rem; color: #fff;">Add Cash to Wallet</h2>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Amount (₹)</label>
+                    <input type="number" id="addCashAmount" class="form-input" placeholder="Min ₹5" min="5" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Payment Method</label>
+                    <select id="addPaymentMethod" class="form-input" style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;" disabled>
+                        <option value="upi" style="background:#000;">UPI Only (GPay / PhonePe / Paytm)</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary w-full" id="submitAddCash">Proceed to Pay</button>
+            </div>
+            
+            <div id="addCashQRContent" style="display: none; text-align: center;">
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.6rem; margin-bottom: 1rem; color: #fff;">Scan to Pay</h2>
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 12px; display: inline-block; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                    <canvas id="upiQRCanvas" style="display: block; margin: 0 auto;"></canvas>
+                </div>
+                <div style="margin-bottom: 1rem; font-size: 1.1rem; font-weight: 700; color: var(--neon-green);">
+                    Amount to Pay: ₹<span id="qrAmountVal">0.00</span>
+                </div>
+                <div id="mobileUpiBtnContainer" style="margin-bottom: 1.5rem; display: none;">
+                    <a id="mobileUpiPayLink" class="btn btn-primary w-full" href="#"><i class="fa-solid fa-mobile-screen-button"></i> Pay via UPI App</a>
+                </div>
+                <div style="text-align: left; background: rgba(0, 255, 102, 0.05); border: 1px solid rgba(0, 255, 102, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 1rem; font-size: 0.85rem; color: #e1e1e6; line-height: 1.4;">
+                    <i class="fa-solid fa-circle-info" style="color: var(--neon-green); margin-right: 4px;"></i> **What is UTR / Ref No?** It is a 12-digit number generated by your bank after a successful payment. Scan the QR code, pay, check your payment details screen, copy the UTR as shown in the image below, and paste it here.
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <img src="upi_utr_guide.png" style="width: 100%; border-radius: 8px; border: 1px solid var(--border-color); display: block;" alt="UTR Location Guide">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem; text-align: left;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">12-digit UTR / Reference No</label>
+                    <input type="text" id="upiRefInput" class="form-input" placeholder="e.g. 618290382012" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem; text-align: center; letter-spacing: 2px;">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-secondary w-full" id="btnCancelQR">Cancel</button>
+                    <button class="btn btn-primary w-full" id="btnSubmitUTR">Submit & Verify</button>
+                </div>
+            </div>
+
+            <div id="addCashSuccessContent" style="display: none; text-align: center; padding: 2rem 0;">
+                <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: var(--neon-green); margin-bottom: 1.5rem;"></i>
+                <h3 style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 0.5rem;">Payment Submitted!</h3>
+                <p style="color: var(--text-secondary);">₹<span id="addedAmountVal">0</span> addition request submitted. Balance will update within 5 minutes after verification.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Cash Modal -->
+    <div class="modal" id="withdrawCashModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 8, 12, 0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+        <div class="modal-content" style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 480px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+            <button class="modal-close" id="closeWithdrawCash" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <div id="withdrawCashFormContent">
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 1.5rem; color: #fff;">Withdraw Cash</h2>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Amount (₹)</label>
+                    <input type="number" id="withdrawAmount" class="form-input" placeholder="Min ₹300" min="300" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                    <span style="font-size:0.75rem; color: var(--text-secondary); margin-top:4px; display:block;">Available: ₹<span id="availableWithdrawBalance">0.00</span></span>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.2rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Bank Account Number</label>
+                    <input type="text" id="withdrawAccount" class="form-input" placeholder="Enter bank account number" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">IFSC Code</label>
+                    <input type="text" id="withdrawIfsc" class="form-input" placeholder="e.g. SBIN0001234" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem; text-transform: uppercase;">
+                </div>
+                <button class="btn btn-primary w-full" id="submitWithdraw">Confirm Withdrawal</button>
+            </div>
+            <div id="withdrawSuccessContent" style="display: none; text-align: center; padding: 2rem 0;">
+                <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: var(--neon-green); margin-bottom: 1.5rem;"></i>
+                <h3 style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 0.5rem;">Withdrawal Requested!</h3>
+                <p style="color: var(--text-secondary);">₹<span id="withdrawnAmountVal">0</span> will be credited to your bank account within 24 hours.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coins Info Modal -->
+    <div class="modal" id="coinsInfoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 8, 12, 0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+        <div class="modal-content" style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 480px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: center;">
+            <button class="modal-close" id="closeCoinsInfo" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <div id="coinsFormContent">
+                <i class="fa-solid fa-coins" style="font-size: 4rem; color: var(--neon-gold); margin-bottom: 1.5rem; text-shadow: 0 0 20px rgba(255, 179, 0, 0.4);"></i>
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 0.5rem; color: #fff;">Convert Coins to Cash</h2>
+                
+                <div style="background: rgba(255, 179, 0, 0.05); border: 1px dashed var(--neon-gold); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">
+                    <span style="font-size: 0.9rem; color: var(--text-secondary); display: block; margin-bottom: 5px;">CONVERSION RATE</span>
+                    <strong style="font-size: 1.5rem; color: #fff; font-family: var(--font-header);">10 Coins = ₹1.00 Cash</strong>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem; text-align: left;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Coins to Redeem</label>
+                    <input type="number" id="redeemCoinsAmount" class="form-input" placeholder="Min 10 Coins" min="10" step="10" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem; text-align: center;">
+                    <span style="font-size:0.75rem; color: var(--text-secondary); margin-top:4px; display:block; text-align:center;">Your Balance: <strong id="modalCoinsAvailable" style="color: var(--neon-gold);">0 Coins</strong></span>
+                </div>
+                
+                <button class="btn btn-primary w-full" id="btnConfirmRedeem" style="background: linear-gradient(135deg, var(--neon-gold) 0%, #d4af37 100%); color: #000; box-shadow: 0 4px 15px rgba(255, 179, 0, 0.25);">Convert to Cash</button>
+            </div>
+            
+            <div id="redeemSuccessContent" style="display: none; text-align: center; padding: 2rem 0;">
+                <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: var(--neon-green); margin-bottom: 1.5rem;"></i>
+                <h3 style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 0.5rem;">Converted Successfully!</h3>
+                <p style="color: var(--text-secondary);">₹<span id="redeemedCashVal">0</span> Cash credited to your wallet balance.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Mega Tournament Registration Modal -->
+    <div class="modal" id="megaRegisterModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 8, 12, 0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+        <div class="modal-content" style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 480px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+            <button class="modal-close" id="closeMegaRegister" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <div id="megaFormContent">
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 1.5rem; color: #fff;">Register: Weekly Mega Battle</h2>
+                <div style="background: rgba(255, 179, 0, 0.1); border: 1px solid var(--neon-gold); border-radius: 8px; padding: 10px; margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--neon-gold);">
+                    <i class="fa-solid fa-circle-info"></i> Entry fee of <strong>₹50</strong> will be deducted from your wallet balance.
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Game UID / Character ID</label>
+                    <input type="text" id="megaUID" class="form-input" placeholder="e.g. 5182903810" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                </div>
+                <button class="btn btn-primary w-full" id="submitMegaRegister">Confirm & Register</button>
+            </div>
+            <div id="megaSuccessContent" style="display: none; text-align: center; padding: 2rem 0;">
+                <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: var(--neon-green); margin-bottom: 1.5rem;"></i>
+                <h3 style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 0.5rem;">Successfully Registered!</h3>
+                <p style="color: var(--text-secondary);">₹50 has been deducted. Room ID & Password will be sent 15 minutes before Sunday 12:00 PM.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gmail OTP Auth Modal -->
+    <div class="modal" id="gmailAuthModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 8, 12, 0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+        <div class="modal-content" style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 480px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+            <button class="modal-close" id="closeGmailAuth" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; display: none;"><i class="fa-solid fa-xmark"></i></button>
+            
+            <!-- Step 1: Request Email -->
+            <div id="gmailInputStep">
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 1.5rem; color: #fff;">Verify with Gmail</h2>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Gmail Address</label>
+                    <input type="email" id="gmailAddressInput" class="form-input" placeholder="example@gmail.com" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Free Fire Character UID</label>
+                    <input type="text" id="gmailFFUIDInput" class="form-input" placeholder="e.g. 5182903810" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">Instagram ID</label>
+                    <input type="text" id="gmailInstaIDInput" class="form-input" placeholder="e.g. your_username" required style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem;">
+                </div>
+                <button class="btn btn-primary w-full" id="btnRequestOtp">Send Verification OTP</button>
+            </div>
+            
+            <!-- Step 2: Input OTP -->
+            <div id="gmailOtpStep" style="display: none;">
+                <h2 class="modal-title" style="font-family: var(--font-header); font-size: 1.8rem; margin-bottom: 1.5rem; color: #fff;">Enter Verification OTP</h2>
+                <div style="background: rgba(0, 255, 102, 0.05); border: 1px solid rgba(0, 255, 102, 0.2); border-radius: 8px; padding: 10px; margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--neon-green);">
+                    <i class="fa-solid fa-circle-info"></i> A 6-digit OTP code has been sent to your Gmail address.
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;">One-Time Password (OTP)</label>
+                    <input type="text" id="gmailOtpInput" class="form-input" placeholder="Enter 6-digit OTP" required maxlength="6" style="width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 8px; color: #fff; font-size: 1rem; text-align: center; letter-spacing: 4px;">
+                </div>
+                <button class="btn btn-primary w-full" id="btnVerifyOtp">Verify & Sign In</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QRious QR Code Generator Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+</html>

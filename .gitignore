@@ -1,0 +1,7 @@
+node_modules
+.env
+.system_generated
+.agents
+*.log
+package-lock.json
+vyra_app

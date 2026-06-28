@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYRA Games — Admin Panel</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS variables -->
+    <style>
+        :root {
+            --bg-main: #0c0d14;
+            --bg-card: #12131a;
+            --bg-darker: #07080c;
+            --border-color: rgba(255, 255, 255, 0.05);
+            --neon-green: #00ff66;
+            --neon-gold: #ffb300;
+            --neon-blue: #00bcff;
+            --text-primary: #ffffff;
+            --text-secondary: #8f92a1;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Login Screen */
+        #loginScreen {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, rgba(0, 255, 102, 0.05) 0%, var(--bg-main) 70%);
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .login-card h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-green);
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--neon-green);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #00ff66 0%, #00d254 100%);
+            color: #000;
+            font-weight: 700;
+            padding: 0.8rem;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 15px rgba(0, 255, 102, 0.25);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 102, 0.4);
+        }
+
+        /* Admin Content Area */
+        #adminContent {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-green);
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .logout-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .logout-link:hover {
+            color: #ff3333;
+        }
+
+        /* Dashboard Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+        }
+
+        .tab-btn.active {
+            background: rgba(0, 255, 102, 0.08);
+            color: var(--neon-green);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Table Design */
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--bg-darker);
+            color: var(--text-primary);
+            padding: 1.2rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 1.2rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .badge-pending {
+            background: rgba(255, 179, 0, 0.1);
+            color: var(--neon-gold);
+            border: 1px solid var(--neon-gold);
+        }
+
+        .badge-approved {
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+        }
+
+        .action-btn {
+            background: var(--neon-green);
+            color: #000;
+            border: none;
+            padding: 6px 12px;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition-smooth);
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Sound Alert Controls */
+        .alert-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .sound-status {
+            color: var(--neon-green);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Login Screen -->
+    <div id="loginScreen">
+        <div class="login-card">
+            <h1>VYRA ADMIN</h1>
+            <div class="form-group">
+                <label for="adminPassword">Admin Security Password</label>
+                <input type="password" id="adminPassword" class="form-input" placeholder="••••••••" required>
+            </div>
+            <button class="btn" id="btnLogin">Access Dashboard</button>
+        </div>
+    </div>
+
+    <!-- 2. Admin Content Area -->
+    <div id="adminContent">
+        <header>
+            <div>
+                <h1>VYRA Admin Panel</h1>
+                <p style="color: var(--text-secondary); margin: 5px 0 0 0;">Manage your players, deposits, and withdrawal requests</p>
+            </div>
+            <div class="header-actions">
+                <div class="alert-toggle">
+                    <i class="fa-solid fa-volume-high"></i> Sound Alerts: <span class="sound-status" id="soundStatus">Active</span>
+                </div>
+                <a class="logout-link" id="btnLogout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="withdrawalsTab"><i class="fa-solid fa-money-bill-transfer"></i> Withdrawal Requests (<span id="withdrawCount">0</span>)</button>
+            <button class="tab-btn" data-tab="depositsTab"><i class="fa-solid fa-wallet"></i> Deposits & UTRs (<span id="depositCount">0</span>)</button>
+            <button class="tab-btn" data-tab="usersTab"><i class="fa-solid fa-users"></i> Registered Users (<span id="userCount">0</span>)</button>
+            <button class="tab-btn" data-tab="createTournamentTab"><i class="fa-solid fa-calendar-plus"></i> Create Tournament (<span id="matchCount">0</span>)</button>
+            <button class="tab-btn" data-tab="lobbyRegistrationsTab"><i class="fa-solid fa-address-card"></i> Lobby UIDs</button>
+        </div>
+
+        <!-- Tab contents -->
+        
+        <!-- Tab 1: Withdrawals -->
+        <div id="withdrawalsTab" class="tab-content active">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Gmail ID</th>
+                            <th>Amount</th>
+                            <th>Account Number</th>
+                            <th>IFSC Code</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="withdrawTableBody">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 2rem;">Loading withdrawal requests...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab 2: Deposits -->
+        <div id="depositsTab" class="tab-content">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Gmail ID</th>
+                            <th>Amount</th>
+                            <th>12-digit UTR Code</th>
+                        </tr>
+                    </thead>
+                    <tbody id="depositTableBody">
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 2rem;">Loading deposits...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab 3: Users -->
+        <div id="usersTab" class="tab-content">
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: start;">
+                <!-- User List with Search -->
+                <div class="table-container" style="padding: 1rem;">
+                    <div style="margin-bottom: 1rem; display: flex; gap: 10px;">
+                        <input type="text" id="adminUserSearchQuery" class="form-input" placeholder="Search by Gmail..." style="padding: 0.5rem 1rem;">
+                        <button class="btn" id="btnSearchUsers" style="width: 100px; padding: 0.5rem; box-shadow: none;">Search</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Gmail ID</th>
+                                <th>Free Fire UID</th>
+                                <th>Instagram ID</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <tr>
+                                <td colspan="2" style="text-align: center; padding: 2rem;">Loading verified users...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Prize Distribution Panel -->
+                <div class="table-container" style="padding: 2rem;">
+                    <h2 style="font-family: 'Orbitron', sans-serif; color: var(--neon-gold); font-size: 1.4rem; margin-top: 0; margin-bottom: 1.5rem;"><i class="fa-solid fa-gift"></i> Distribute Prize Cash</h2>
+                    
+                    <div class="form-group">
+                        <label for="prizeEmail">Winner Gmail ID</label>
+                        <input type="email" id="prizeEmail" class="form-input" placeholder="e.g. winner@gmail.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="prizeAmount">Prize Amount (₹)</label>
+                        <input type="number" id="prizeAmount" class="form-input" placeholder="e.g. 150" min="1" required>
+                    </div>
+
+                    <button class="btn" id="btnSendPrize" style="background: linear-gradient(135deg, var(--neon-gold) 0%, #d4af37 100%); color: #000; box-shadow: 0 4px 15px rgba(255, 179, 0, 0.25);">Credit Winner Wallet</button>
+                </div>
+            </div>
+        </div>
+        <!-- Tab 4: Create Tournament -->
+        <div id="createTournamentTab" class="tab-content">
+            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; align-items: start;">
+                <!-- Column 1: Create Match Form -->
+                <div class="table-container" style="padding: 2rem;">
+                    <h2 style="font-family: 'Orbitron', sans-serif; color: var(--neon-green); font-size: 1.4rem; margin-top: 0; margin-bottom: 1.5rem;"><i class="fa-solid fa-calendar-plus"></i> Create Tournament</h2>
+                    
+                    <div class="form-group">
+                        <label for="matchGame">Game Title</label>
+                        <select id="matchGame" class="form-input" style="background: var(--bg-darker);">
+                            <option value="FREE FIRE">Garena Free Fire</option>
+                            <option value="BGMI">BGMI (Battlegrounds India)</option>
+                            <option value="COD Mobile">Call Of Duty Mobile</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="matchMap">Map Name</label>
+                        <input type="text" id="matchMap" class="form-input" placeholder="e.g. Bermuda, Erangel" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group">
+                            <label for="matchDate">Date</label>
+                            <input type="date" id="matchDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="matchTime">Time (e.g. 16:00, 18:30)</label>
+                            <input type="time" id="matchTime" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group">
+                            <label for="matchMode">Mode</label>
+                            <select id="matchMode" class="form-input" style="background: var(--bg-darker);">
+                                <option value="Solo">Solo</option>
+                                <option value="Duo">Duo</option>
+                                <option value="Squad">Squad</option>
+                                <option value="1v1">1v1</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group">
+                            <label for="matchEntryFee">Entry Fee (₹)</label>
+                            <input type="number" id="matchEntryFee" class="form-input" placeholder="e.g. 10" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="matchPrizePool">Prize Pool (₹)</label>
+                            <input type="number" id="matchPrizePool" class="form-input" placeholder="e.g. 200" required>
+                        </div>
+                    </div>
+
+                    <button class="btn" id="btnCreateMatch" style="margin-top: 1rem;">Create Tournament</button>
+                </div>
+
+                <!-- Column 2: Matches list with Room credentials updates -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Match Detail</th>
+                                <th>Mode/Map</th>
+                                <th>Fee/Prize</th>
+                                <th>Slots</th>
+                                <th>Room ID / Password</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matchTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem;">Loading scheduled matches...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+
+        <!-- Tab 5: Lobby UIDs -->
+        <div id="lobbyRegistrationsTab" class="tab-content">
+            <!-- Search & Filter Options -->
+            <div class="table-container" style="padding: 1.5rem; margin-bottom: 2rem; display: flex; gap: 15px; align-items: center; background: var(--bg-card);">
+                <div style="flex: 1; min-width: 250px;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 600;">Search Player UID or Gmail</label>
+                    <input type="text" id="uidSearchQuery" class="form-input" placeholder="Enter Gmail or Character UID..." style="padding: 0.6rem 1rem;">
+                </div>
+                <div style="width: 220px;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 600;">Filter by Match ID</label>
+                    <select id="uidMatchFilter" class="form-input" style="background: var(--bg-darker); padding: 0.6rem 1rem;">
+                        <option value="all">All Lobbies</option>
+                    </select>
+                </div>
+                <button class="btn" id="btnFilterUIDs" style="width: 140px; padding: 0.65rem; margin-top: 1.3rem;">Search</button>
+            </div>
+
+            <!-- UIDs List Table -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Registered Time</th>
+                            <th>Match Description</th>
+                            <th>Player Gmail ID</th>
+                            <th>Character UIDs</th>
+                            <th>Match ID</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lobbyRegistrationsTableBody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 2rem;">No player registrations found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Web Audio Alert beep -->
+    <script>
+        // Simple Audio Context beep generator
+        const playBeep = () => {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Beep 1
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime); // A5 note
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+                
+                // Beep 2 (double beep)
+                setTimeout(() => {
+                    const audioCtx2 = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc2 = audioCtx2.createOscillator();
+                    const gain2 = audioCtx2.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(audioCtx2.destination);
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(1200, audioCtx2.currentTime);
+                    gain2.gain.setValueAtTime(0.1, audioCtx2.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx2.currentTime + 0.3);
+                    osc2.start();
+                    osc2.stop(audioCtx2.currentTime + 0.3);
+                }, 150);
+            } catch (e) {
+                console.error("Web audio beep failed:", e);
+            }
+        };
+
+        // UI Scripting
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginScreen = document.getElementById('loginScreen');
+            const adminContent = document.getElementById('adminContent');
+            const btnLogin = document.getElementById('btnLogin');
+            const btnLogout = document.getElementById('btnLogout');
+            const adminPasswordInput = document.getElementById('adminPassword');
+            
+            let lastWithdrawCount = 0;
+            let currentToken = localStorage.getItem('adminToken');
+
+            const checkSession = () => {
+                if (currentToken === 'vyra-authenticated') {
+                    loginScreen.style.display = 'none';
+                    adminContent.style.display = 'block';
+                    startDashboardPolling();
+                } else {
+                    loginScreen.style.display = 'flex';
+                    adminContent.style.display = 'none';
+                }
+            };
+
+            // Login Button
+            btnLogin.addEventListener('click', () => {
+                const pass = adminPasswordInput.value.trim();
+                // Simple admin password
+                if (pass === 'kishan6202##') {
+                    localStorage.setItem('adminToken', 'vyra-authenticated');
+                    currentToken = 'vyra-authenticated';
+                    checkSession();
+                } else {
+                    alert('Access Denied: Incorrect Security Password.');
+                }
+            });
+
+            // Logout Button
+            btnLogout.addEventListener('click', () => {
+                localStorage.removeItem('adminToken');
+                currentToken = null;
+                checkSession();
+            });
+
+            // Tab Switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    btn.classList.add('active');
+                    const tabId = btn.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // API Data Fetching
+            const fetchDashboardData = async () => {
+                try {
+                    const response = await fetch('/api/admin/data');
+                    if (!response.ok) return;
+
+                    const data = await response.json();
+                    
+                    // 1. Update Counters
+                    document.getElementById('withdrawCount').innerText = data.withdrawals.length;
+                    document.getElementById('depositCount').innerText = data.deposits.length;
+                    document.getElementById('userCount').innerText = data.users.length;
+                    document.getElementById('matchCount').innerText = data.matches ? data.matches.length : 0;
+
+                    // 2. Play Notification Beep on new withdrawals
+                    const pendingWithdraws = data.withdrawals.filter(w => w.status === 'Pending').length;
+                    if (pendingWithdraws > lastWithdrawCount) {
+                        playBeep();
+                    }
+                    lastWithdrawCount = pendingWithdraws;
+
+                    // 3. Render Withdrawals
+                    const withdrawBody = document.getElementById('withdrawTableBody');
+                    if (data.withdrawals.length === 0) {
+                        withdrawBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No withdrawal requests found.</td></tr>`;
+                    } else {
+                        // Show newest first
+                        withdrawBody.innerHTML = data.withdrawals.reverse().map(w => {
+                            const dateStr = new Date(w.timestamp).toLocaleString();
+                            const isPending = w.status === 'Pending';
+                            return `
+                                <tr>
+                                    <td>${dateStr}</td>
+                                    <td><strong>${w.email}</strong></td>
+                                    <td style="color: var(--neon-green); font-weight: 700;">₹${w.amount.toFixed(2)}</td>
+                                    <td><code>${w.account}</code></td>
+                                    <td style="text-transform: uppercase;">${w.ifsc}</td>
+                                    <td><span class="badge ${isPending ? 'badge-pending' : 'badge-approved'}">${w.status}</span></td>
+                                    <td>
+                                        ${isPending ? `<button class="action-btn" onclick="approveWithdrawal('${w.timestamp}')">Approve & Pay</button>` : `<span style="color: #5a5c6a;">Completed</span>`}
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('');
+                    }
+
+                    // 4. Render Deposits
+                    const depositBody = document.getElementById('depositTableBody');
+                    if (data.deposits.length === 0) {
+                        depositBody.innerHTML = `<tr><td colspan="4" style="text-align: center;">No deposits found.</td></tr>`;
+                    } else {
+                        depositBody.innerHTML = data.deposits.reverse().map(d => {
+                            const dateStr = new Date(d.timestamp).toLocaleString();
+                            return `
+                                <tr>
+                                    <td>${dateStr}</td>
+                                    <td><strong>${d.email}</strong></td>
+                                    <td style="color: var(--neon-blue); font-weight: 700;">₹${d.amount.toFixed(2)}</td>
+                                    <td><code style="color: var(--neon-gold); font-size: 1.1rem; letter-spacing: 1px;">${d.utr}</code></td>
+                                </tr>
+                            `;
+                        }).join('');
+                    }
+
+                    // 5. Render Users
+                    const userBody = document.getElementById('userTableBody');
+                    const userSearch = document.getElementById('adminUserSearchQuery').value.trim().toLowerCase();
+                    
+                    let filteredUsers = data.users;
+                    if (userSearch) {
+                        filteredUsers = filteredUsers.filter(u => {
+                            if (typeof u === 'string') return u.toLowerCase().includes(userSearch);
+                            const em = (u.email || '').toLowerCase().includes(userSearch);
+                            const uid = (u.ffuid || '').toLowerCase().includes(userSearch);
+                            const insta = (u.instaid || '').toLowerCase().includes(userSearch);
+                            return em || uid || insta;
+                        });
+                    }
+                    
+                    if (filteredUsers.length === 0) {
+                        userBody.innerHTML = `<tr><td colspan="4" style="text-align: center;">No matching users found.</td></tr>`;
+                    } else {
+                        userBody.innerHTML = filteredUsers.map((u, i) => {
+                            const emailStr = typeof u === 'string' ? u : (u.email || '');
+                            const ffuidStr = u.ffuid || '<span style="color: var(--text-secondary);">N/A</span>';
+                            const instaidStr = u.instaid || '<span style="color: var(--text-secondary);">N/A</span>';
+                            return `
+                                <tr>
+                                    <td>${i + 1}</td>
+                                    <td><strong>${emailStr}</strong></td>
+                                    <td><code>${ffuidStr}</code></td>
+                                    <td><a href="https://instagram.com/${instaidStr}" target="_blank" style="color: var(--neon-blue); text-decoration: none;">@${instaidStr}</a></td>
+                                </tr>
+                            `;
+                        }).join('');
+                    }
+
+                    // 6. Render Matches (Match Manager)
+                    const matchBody = document.getElementById('matchTableBody');
+                    if (!data.matches || data.matches.length === 0) {
+                        matchBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No custom matches created yet.</td></tr>`;
+                    } else {
+                        matchBody.innerHTML = data.matches.map(m => {
+                            return `
+                                <tr>
+                                    <td>
+                                        <strong>${m.game}</strong><br>
+                                        <span style="color: var(--neon-gold); font-size: 0.85rem;"><i class="fa-solid fa-clock"></i> ${m.time}</span>
+                                    </td>
+                                    <td>
+                                        <span>${m.mode}</span><br>
+                                        <span style="font-size: 0.85rem;">Map: ${m.map}</span>
+                                    </td>
+                                    <td>
+                                        <span>Fee: ₹${m.entryFee}</span><br>
+                                        <span style="color: var(--neon-green); font-size: 0.85rem;">Prize: ₹${m.prizePool}</span>
+                                    </td>
+                                    <td>
+                                        <span style="color: var(--neon-gold); font-weight: bold;">${m.registered}/${m.totalSpots}</span>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                                            <input type="text" id="roomId_${m.id}" class="form-input" style="padding: 4px 8px; font-size: 0.85rem; width: 120px;" placeholder="Room ID" value="${m.roomId || ''}">
+                                            <input type="text" id="roomPass_${m.id}" class="form-input" style="padding: 4px 8px; font-size: 0.85rem; width: 120px;" placeholder="Password" value="${m.password || ''}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                                            <button class="action-btn" style="padding: 4px 8px; font-size: 0.8rem; background: var(--neon-green); color: #000;" onclick="updateRoomCredentials('${m.id}')">Save Room</button>
+                                            <button class="action-btn" style="padding: 4px 8px; font-size: 0.8rem; background: #ff3333; color: #fff;" onclick="deleteMatch('${m.id}')">Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('');
+                    }
+
+                    // 7. Update Lobby UIDs Filter Dropdown & Table List
+                    const matchFilterDropdown = document.getElementById('uidMatchFilter');
+                    const selectedFilterValue = matchFilterDropdown.value;
+                    // Reset options save the static "All Lobbies"
+                    matchFilterDropdown.innerHTML = '<option value="all">All Lobbies</option>';
+                    
+                    if (data.matches) {
+                        data.matches.forEach(m => {
+                            const opt = document.createElement('option');
+                            opt.value = m.id;
+                            opt.innerText = `${m.game} — ID: ${m.id} (${m.time})`;
+                            matchFilterDropdown.appendChild(opt);
+                        });
+                        // Keep user selection active
+                        matchFilterDropdown.value = selectedFilterValue;
+                    }
+
+                    // Prepare registration records array
+                    let allRegistrations = [];
+                    if (data.matches) {
+                        data.matches.forEach(m => {
+                            if (m.players) {
+                                m.players.forEach(p => {
+                                    allRegistrations.push({
+                                        matchId: m.id,
+                                        matchDesc: `${m.game} (${m.mode} at ${m.time})`,
+                                        email: p.email,
+                                        uids: p.uids,
+                                        timestamp: p.timestamp
+                                    });
+                                });
+                            }
+                        });
+                    }
+
+                    // Apply Search Query & Match Filter in UI
+                    const searchQuery = document.getElementById('uidSearchQuery').value.trim().toLowerCase();
+                    const matchFilter = matchFilterDropdown.value;
+
+                    let filteredRegs = allRegistrations;
+
+                    // Filter by match ID
+                    if (matchFilter !== 'all') {
+                        filteredRegs = filteredRegs.filter(r => r.matchId === matchFilter);
+                    }
+
+                    // Filter by Search Query (UID or Email)
+                    if (searchQuery) {
+                        filteredRegs = filteredRegs.filter(r => {
+                            const emailMatches = r.email.toLowerCase().includes(searchQuery);
+                            const uidMatches = r.uids.some(uid => uid.toLowerCase().includes(searchQuery));
+                            return emailMatches || uidMatches;
+                        });
+                    }
+
+                    const regTableBody = document.getElementById('lobbyRegistrationsTableBody');
+                    if (filteredRegs.length === 0) {
+                        regTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem;">No player registrations matching parameters.</td></tr>`;
+                    } else {
+                        regTableBody.innerHTML = filteredRegs.map(r => {
+                            const regDate = new Date(r.timestamp).toLocaleString();
+                            const uidsListStr = r.uids && r.uids.length > 0 ? r.uids.map(uid => `<code style="background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); color: var(--neon-gold); margin-right: 5px;">${uid}</code>`).join(' ') : '<span style="color: #ff3333;">N/A</span>';
+                            return `
+                                <tr>
+                                    <td>${regDate}</td>
+                                    <td><strong>${r.matchDesc}</strong></td>
+                                    <td>${r.email}</td>
+                                    <td>${uidsListStr}</td>
+                                    <td><code>${r.matchId}</code></td>
+                                </tr>
+                            `;
+                        }).join('');
+                    }
+
+                } catch (err) {
+                    console.error("Error fetching admin dashboard details:", err);
+                }
+            };
+
+            // Hook up Filter Search Button click
+            const btnFilterUIDs = document.getElementById('btnFilterUIDs');
+            if (btnFilterUIDs) {
+                btnFilterUIDs.addEventListener('click', () => {
+                    fetchDashboardData();
+                });
+            }
+
+            // Hook up User list Search button
+            const btnSearchUsers = document.getElementById('btnSearchUsers');
+            if (btnSearchUsers) {
+                btnSearchUsers.addEventListener('click', () => {
+                    fetchDashboardData();
+                });
+            }
+
+            // Create Match Button Click
+            const btnCreateMatch = document.getElementById('btnCreateMatch');
+            if (btnCreateMatch) {
+                btnCreateMatch.addEventListener('click', async () => {
+                    const game = document.getElementById('matchGame').value;
+                    const mapName = document.getElementById('matchMap').value.trim();
+                    const dateVal = document.getElementById('matchDate').value.trim();
+                    const timeVal = document.getElementById('matchTime').value.trim();
+                    const mode = document.getElementById('matchMode').value;
+                    const entryFee = parseFloat(document.getElementById('matchEntryFee').value) || 0;
+                    const prizePool = parseFloat(document.getElementById('matchPrizePool').value) || 0;
+
+                    if (!mapName || !dateVal || !timeVal) {
+                        alert('Please fill out Map Name, Date, and Time.');
+                        return;
+                    }
+
+                    // Format Time/Date beautifully (e.g. "2026-06-27 at 16:30")
+                    const formattedTime = `${dateVal} at ${timeVal}`;
+
+                    try {
+                        const response = await fetch('/api/admin/create-match', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ game, map: mapName, time: formattedTime, mode, entryFee, prizePool })
+                        });
+                        const res = await response.json();
+                        if (res.success) {
+                            alert('Match created successfully!');
+                            document.getElementById('matchMap').value = '';
+                            document.getElementById('matchDate').value = '';
+                            document.getElementById('matchTime').value = '';
+                            document.getElementById('matchEntryFee').value = '';
+                            document.getElementById('matchPrizePool').value = '';
+                            fetchDashboardData();
+                        } else {
+                            alert(res.message || 'Failed to create match.');
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert('Error communicating with server.');
+                    }
+                });
+            }
+
+            // Send Prize Button Click
+            const btnSendPrize = document.getElementById('btnSendPrize');
+            if (btnSendPrize) {
+                btnSendPrize.addEventListener('click', async () => {
+                    const email = document.getElementById('prizeEmail').value.trim();
+                    const amount = parseFloat(document.getElementById('prizeAmount').value) || 0;
+
+                    if (!email || amount <= 0) {
+                        alert('Please enter a valid winner email and prize amount.');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch('/api/admin/credit-prize', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email, amount })
+                        });
+                        const res = await response.json();
+                        if (res.success) {
+                            alert(res.message);
+                            document.getElementById('prizeEmail').value = '';
+                            document.getElementById('prizeAmount').value = '';
+                            fetchDashboardData();
+                        } else {
+                            alert(res.message || 'Failed to send prize.');
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert('Error communication with backend server.');
+                    }
+                });
+            }
+
+            // Expose update room function to window
+            window.updateRoomCredentials = async (matchId) => {
+                const roomId = document.getElementById(`roomId_${matchId}`).value.trim();
+                const password = document.getElementById(`roomPass_${matchId}`).value.trim();
+
+                try {
+                    const response = await fetch('/api/admin/update-room', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ matchId, roomId, password })
+                    });
+                    const res = await response.json();
+                    if (res.success) {
+                        alert('Room credentials updated successfully!');
+                        fetchDashboardData();
+                    } else {
+                        alert(res.message || 'Failed to update credentials.');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Error communicating with server.');
+                }
+            };
+
+             // Expose delete match function to window
+             window.deleteMatch = async (matchId) => {
+                 if (!confirm('Are you sure you want to delete this tournament permanently?')) return;
+
+                 try {
+                     const response = await fetch('/api/admin/delete-match', {
+                         method: 'POST',
+                         headers: { 'Content-Type': 'application/json' },
+                         body: JSON.stringify({ matchId })
+                     });
+                     const res = await response.json();
+                     if (res.success) {
+                         alert('Tournament deleted successfully!');
+                         fetchDashboardData();
+                     } else {
+                         alert(res.message || 'Failed to delete tournament.');
+                     }
+                 } catch (err) {
+                     console.error(err);
+                     alert('Error communicating with server.');
+                 }
+             };
+
+            // Global approval function exposed to inline onclick handlers
+            window.approveWithdrawal = async (timestamp) => {
+                if (!confirm('Are you sure you want to approve this withdrawal request? Mark as Paid.')) return;
+                
+                try {
+                    const response = await fetch('/api/admin/approve-withdrawal', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ timestamp })
+                    });
+                    const res = await response.json();
+                    if (res.success) {
+                        fetchDashboardData();
+                    } else {
+                        alert(res.message || 'Failed to approve withdrawal.');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Error communicating with server.');
+                }
+            };
+
+            // Polling interval (every 10 seconds)
+            let pollInterval = null;
+            const startDashboardPolling = () => {
+                fetchDashboardData();
+                if (pollInterval) clearInterval(pollInterval);
+                pollInterval = setInterval(fetchDashboardData, 10000);
+            };
+
+            // Initialize Page
+            checkSession();
+        });
+    </script>
+</body>
+</html>
